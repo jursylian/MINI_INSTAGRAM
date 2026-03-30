@@ -76,3 +76,11 @@ npm run dev
 cd frontend
 npm install
 npm run dev
+```
+## 📂 Installation & Setup
+
+### 1. Clone repository
+
+```bash
+git clone https://github.com/jursylian/MINI_INSTAGRAM.git
+cd MINI_INSTAGRAM
