@@ -70,3 +70,9 @@ For production, cloud storage (e.g. AWS S3 or Cloudinary) is recommended.
 cd backend
 npm install
 npm run dev
+```
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
