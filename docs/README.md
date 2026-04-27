@@ -78,7 +78,7 @@ For production, cloud storage (e.g. AWS S3 or Cloudinary) is recommended.
 ---
 
 ## 🔗 Live Demo
-Frontend: https://your-vercel-link.vercel.app  
+Frontend: https://mini-instagram-one.vercel.app
 Backend API: https://mini-instagram-2.onrender.com
 
 ---
