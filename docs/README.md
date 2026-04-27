@@ -23,6 +23,15 @@ The project demonstrates fullstack development skills including authentication, 
 
 ---
 
+## 🌍 Deployment & Production
+- Frontend deployed on Vercel
+- Backend deployed on Render
+- Database migrated from local MongoDB to MongoDB Atlas
+- Configured environment variables for production
+- Refactored API base URL using VITE_API_BASE_URL
+- Fixed localhost issues for production deployment
+- Connected fullstack monorepo architecture to cloud services
+
 ## 🛠 Tech Stack
 
 ### Frontend
@@ -42,14 +51,24 @@ The project demonstrates fullstack development skills including authentication, 
 ---
 
 ## 💡 Key Highlights
-
-- Fullstack architecture (frontend + backend)
-- REST API design and implementation
-- Component-based frontend structure
-- Responsive UI with focus on UX
-- Real-world app structure (similar to social platforms)
+- Fullstack MERN-style architecture
+- JWT-based authentication
+- RESTful API integration
+- Cloud deployment (Render + Vercel + MongoDB Atlas)
+- Responsive social media UI
+- Monorepo project structure
 
 ---
+
+## 🔐 Environment Variables
+
+Backend:
+MONGO_URI=
+JWT_SECRET=
+JWT_EXPIRES_IN=
+
+Frontend:
+VITE_API_BASE_URL=
 
 ## ⚠️ Notes
 
@@ -58,8 +77,9 @@ For production, cloud storage (e.g. AWS S3 or Cloudinary) is recommended.
 
 ---
 
-## 🔗 Demo
-(Add your deployment link here)
+## 🔗 Live Demo
+Frontend: https://your-vercel-link.vercel.app  
+Backend API: https://mini-instagram-2.onrender.com
 
 ---
 
