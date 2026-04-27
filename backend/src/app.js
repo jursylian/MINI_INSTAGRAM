@@ -11,16 +11,20 @@ import commentsRoutes from "./routes/commentsRoutes.js";
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5175",
+  process.env.CORS_ORIGIN,
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "http://localhost:5175",
-    ],
+    origin: allowedOrigins,
     credentials: true,
   }),
 );
+
 app.use(express.json());
 
 app.get("/api/health", (_req, res) => {
