@@ -4,7 +4,6 @@ const DEFAULT_ITEMS = [
   "Home",
   "Search",
   "Explore",
-  "Messages",
   "Notifications",
   "Create",
 ];

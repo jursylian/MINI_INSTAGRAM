@@ -428,7 +428,6 @@ export default function AppLayout() {
               setPanel(null);
               navigate("/explore");
             }}
-            onMessages={() => {}}
             onNotifications={() => togglePanel("notifications")}
             onCreate={() => {
               if (isDesktop) {
@@ -458,10 +457,6 @@ export default function AppLayout() {
                   setPanel(null);
                   navigate("/explore");
                 },
-              },
-              {
-                label: "Messages",
-                onClick: () => {},
               },
               {
                 label: "Notifications",
@@ -768,7 +763,6 @@ function FooterNav({
   onHome,
   onSearch,
   onExplore,
-  onMessages,
   onNotifications,
   onCreate,
 }) {
@@ -809,12 +803,6 @@ function FooterNav({
               iconClass,
               exploreActive ? iconActive : iconInactive,
             ].join(" ")}
-          />
-        </MobileIconButton>
-        <MobileIconButton onClick={onMessages} label="Messages">
-          <img
-            src="/images/Messages.svg"
-            className={[iconClass, iconInactive].join(" ")}
           />
         </MobileIconButton>
         <MobileIconButton to={profileHref} label="Profile">

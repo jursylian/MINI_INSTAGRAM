@@ -235,7 +235,7 @@ export default function Profile() {
                   Edit profile
                 </Link>
               ) : (
-                <div className="flex items-center justify-center gap-2">
+                <div className="flex items-center justify-center">
                   <button
                     type="button"
                     onClick={handleToggleFollow}
@@ -249,12 +249,6 @@ export default function Profile() {
                     ].join(" ")}
                   >
                     {stats.isFollowing ? "Following" : "Follow"}
-                  </button>
-                  <button
-                    type="button"
-                    className="rounded-lg bg-[#EFEFEF] px-6 py-1.5 text-[14px] font-semibold text-[#262626] hover:bg-[#DBDBDB] transition"
-                  >
-                    Message
                   </button>
                 </div>
               )}

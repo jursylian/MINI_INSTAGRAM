@@ -7,6 +7,7 @@ import PostCreateModal from "../components/PostCreateModal.jsx";
 import { useAuth } from "../auth/AuthContext.jsx";
 import useIsDesktop from "../lib/useIsDesktop.js";
 import { toggleLike } from "../lib/useLikeToggle.js";
+import { defaultPosts, isDemoPost } from "../data/defaultPosts.js";
 
 export default function Feed() {
   const isDesktop = useIsDesktop();
@@ -18,6 +19,8 @@ export default function Feed() {
   const [likeLoadingIds, setLikeLoadingIds] = useState(new Set());
   const [modalPostId, setModalPostId] = useState(null);
   const [editPost, setEditPost] = useState(null);
+  const postsToRender =
+    !loading && !error && items.length === 0 ? defaultPosts : items;
 
   useEffect(() => {
     let mounted = true;
@@ -121,14 +124,14 @@ export default function Feed() {
         )}
 
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2 xl:gap-8 min-[1440px]:gap-x-[30px] min-[1440px]:gap-y-[22px]">
-          {items.map((post) => (
+          {postsToRender.map((post) => (
             <FeedPost
               key={post._id}
               post={post}
               likeLoading={likeLoadingIds.has(post._id)}
-              onToggleLike={handleToggleLike}
-              onOpenComments={handleOpenComments}
-              onOpenPost={handleOpenPost}
+              onToggleLike={isDemoPost(post) ? undefined : handleToggleLike}
+              onOpenComments={isDemoPost(post) ? undefined : handleOpenComments}
+              onOpenPost={isDemoPost(post) ? undefined : handleOpenPost}
             />
           ))}
         </div>

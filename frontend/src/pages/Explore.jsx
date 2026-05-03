@@ -5,6 +5,7 @@ import { EXPLORE_LIMIT } from "../lib/constants.js";
 import PostModal from "../components/PostModal.jsx";
 import PostCreateModal from "../components/PostCreateModal.jsx";
 import useIsDesktop from "../lib/useIsDesktop.js";
+import { defaultPosts, isDemoPost } from "../data/defaultPosts.js";
 
 const TILE_AREAS = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
 
@@ -15,6 +16,8 @@ export default function Explore() {
   const [loading, setLoading] = useState(true);
   const [modalPostId, setModalPostId] = useState(null);
   const [editPost, setEditPost] = useState(null);
+  const postsToRender =
+    !loading && !error && items.length === 0 ? defaultPosts : items;
 
   useEffect(() => {
     let mounted = true;
@@ -54,12 +57,6 @@ export default function Explore() {
             </div>
           ) : null}
 
-          {!loading && !error && items.length === 0 ? (
-            <div className="p-4 text-[14px] text-[#737373]">
-              No posts yet.
-            </div>
-          ) : null}
-
           <div
             className="mt-6 grid grid-cols-3 gap-1 md:gap-[4px]"
             style={
@@ -71,29 +68,48 @@ export default function Explore() {
                 : undefined
             }
           >
-            {items.map((post, index) => (
-              <button
-                key={post._id}
-                type="button"
-                onClick={() => {
-                  setModalPostId(post._id);
-                }}
-                className="overflow-hidden bg-[#F2F2F2] aspect-square md:aspect-auto"
-                style={
-                  isDesktop && TILE_AREAS[index]
-                    ? { gridArea: TILE_AREAS[index] }
-                    : undefined
-                }
-              >
-                {post.image ? (
-                  <img
-                    src={post.image}
-                    alt={post.caption || "post"}
-                    loading="lazy"
-                    className="h-full w-full object-cover"
-                  />
-                ) : null}
-              </button>
+            {postsToRender.map((post, index) => (
+              isDemoPost(post) ? (
+                <div
+                  key={post._id}
+                  className="overflow-hidden bg-[#F2F2F2] aspect-square md:aspect-auto"
+                  style={
+                    isDesktop && TILE_AREAS[index]
+                      ? { gridArea: TILE_AREAS[index] }
+                      : undefined
+                  }
+                >
+                  {post.image ? (
+                    <img
+                      src={post.image}
+                      alt={post.caption || "post"}
+                      loading="lazy"
+                      className="h-full w-full object-cover"
+                    />
+                  ) : null}
+                </div>
+              ) : (
+                <button
+                  key={post._id}
+                  type="button"
+                  onClick={() => setModalPostId(post._id)}
+                  className="overflow-hidden bg-[#F2F2F2] aspect-square md:aspect-auto"
+                  style={
+                    isDesktop && TILE_AREAS[index]
+                      ? { gridArea: TILE_AREAS[index] }
+                      : undefined
+                  }
+                >
+                  {post.image ? (
+                    <img
+                      src={post.image}
+                      alt={post.caption || "post"}
+                      loading="lazy"
+                      className="h-full w-full object-cover"
+                    />
+                  ) : null}
+                </button>
+              )
             ))}
           </div>
         </div>

@@ -27,10 +27,6 @@ export default function NotFound() {
                 Explore
               </div>
               <div className="flex items-center gap-3">
-                <img src="/images/Messages.svg" className="h-5 w-5" />
-                Messages
-              </div>
-              <div className="flex items-center gap-3">
                 <img src="/images/Like.svg" className="h-5 w-5" />
                 Notifications
               </div>

@@ -71,11 +71,6 @@ export default function Sidebar({
             <span className={labelClass}>Explore</span>
           </Link>
 
-          <div className={rowClass} role="button" tabIndex={0}>
-            <img src="/images/Messages.svg" className={iconClass} />
-            <span className={labelClass}>Messages</span>
-          </div>
-
           <button onClick={onToggleNotifications} className={rowClass}>
             <span className="relative">
               <img
