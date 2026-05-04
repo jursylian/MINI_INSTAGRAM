@@ -60,22 +60,6 @@ export default function Explore() {
       <div className="mx-auto w-full max-w-[980px]">
         <div className="mt-6">
           {loading ? <div className="text-[14px] text-[#737373]">Loading...</div> : null}
-          {error ? (
-            <div className="p-4 text-[14px]">
-              <div className="text-red-500">{error}</div>
-              <div className="mt-1 text-[#737373]">
-                Showing demo posts while the server wakes up.
-              </div>
-              <button
-                type="button"
-                onClick={() => loadExplore()}
-                className="mt-3 font-semibold text-[#0095F6] hover:text-[#1877F2]"
-              >
-                Retry
-              </button>
-            </div>
-          ) : null}
-
           <div
             className="mt-6 grid grid-cols-3 gap-1 md:gap-[4px]"
             style={

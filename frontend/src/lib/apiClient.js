@@ -61,9 +61,7 @@ export async function request(path, options = {}) {
     return data;
   } catch (err) {
     if (err.name === "AbortError") {
-      const error = new Error(
-        "The server is taking longer than expected. Please try again.",
-      );
+      const error = new Error("Unable to load data. Please try again.");
       error.status = 408;
       throw error;
     }

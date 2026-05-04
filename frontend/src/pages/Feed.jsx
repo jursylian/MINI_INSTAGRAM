@@ -130,22 +130,6 @@ export default function Feed() {
           <div className="text-[14px] text-[#737373]">Loading...</div>
         )}
 
-        {error && (
-          <div className="border border-[#DBDBDB] bg-white p-3 text-[14px]">
-            <div className="text-red-500">{error}</div>
-            <div className="mt-1 text-[#737373]">
-              Showing demo posts while the server wakes up.
-            </div>
-            <button
-              type="button"
-              onClick={loadFeed}
-              className="mt-3 text-[14px] font-semibold text-[#0095F6] hover:text-[#1877F2]"
-            >
-              Retry
-            </button>
-          </div>
-        )}
-
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2 xl:gap-8 min-[1440px]:gap-x-[30px] min-[1440px]:gap-y-[22px]">
           {postsToRender.map((post) => (
             <FeedPost
