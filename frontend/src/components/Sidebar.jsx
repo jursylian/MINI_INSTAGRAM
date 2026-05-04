@@ -131,13 +131,20 @@ export default function Sidebar({
             </Link>
           )}
 
-          <button
-            onClick={onLogout}
-            className={[rowClass, "hover:bg-transparent", "hover:[&>span]:text-[#1f1f1f]"].join(" ")}
-          >
-            <img src="/images/Logout.svg" className={iconClass} />
-            <span className={labelClass}>Log out</span>
-          </button>
+          {user?._id ? (
+            <button
+              onClick={onLogout}
+              className={[rowClass, "hover:bg-transparent", "hover:[&>span]:text-[#1f1f1f]"].join(" ")}
+            >
+              <img src="/images/Logout.svg" className={iconClass} />
+              <span className={labelClass}>Log out</span>
+            </button>
+          ) : (
+            <Link to="/login" className={rowClass} onClick={onNavigate}>
+              <img src="/images/Profile.svg" className={iconClass} />
+              <span className={labelClass}>Log in</span>
+            </Link>
+          )}
         </nav>
 
         <div className="mt-auto" />

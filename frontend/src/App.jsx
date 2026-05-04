@@ -20,6 +20,11 @@ import Following from "./pages/Following.jsx";
 import Explore from "./pages/Explore.jsx";
 import Notifications from "./pages/Notifications.jsx";
 import Search from "./pages/Search.jsx";
+
+function ProtectedPage({ children }) {
+  return <ProtectedRoute>{children}</ProtectedRoute>;
+}
+
 export default function App() {
   return (
     <Routes>
@@ -29,25 +34,82 @@ export default function App() {
       <Route path="/reset" element={<Reset />} />
       <Route path="/reset-password" element={<ResetPassword />} />
 
-      {/* Protected with shared layout (sidebar) */}
-      <Route
-        element={
-          <ProtectedRoute>
-            <AppLayout />
-          </ProtectedRoute>
-        }
-      >
+      {/* Shared layout. Feed and Explore are public portfolio views. */}
+      <Route element={<AppLayout />}>
         <Route path="/" element={<Feed />} />
-        <Route path="/create" element={<PostCreate />} />
-        <Route path="/posts/new" element={<PostCreate />} />
-        <Route path="/post/:id" element={<PostDetail />} />
-        <Route path="/profile/:id" element={<Profile />} />
-        <Route path="/profile/:id/edit" element={<ProfileEdit />} />
-        <Route path="/profile/:id/followers" element={<Followers />} />
-        <Route path="/profile/:id/following" element={<Following />} />
         <Route path="/explore" element={<Explore />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/notifications" element={<Notifications />} />
+        <Route
+          path="/create"
+          element={
+            <ProtectedPage>
+              <PostCreate />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/posts/new"
+          element={
+            <ProtectedPage>
+              <PostCreate />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/post/:id"
+          element={
+            <ProtectedPage>
+              <PostDetail />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/profile/:id"
+          element={
+            <ProtectedPage>
+              <Profile />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/profile/:id/edit"
+          element={
+            <ProtectedPage>
+              <ProfileEdit />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/profile/:id/followers"
+          element={
+            <ProtectedPage>
+              <Followers />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/profile/:id/following"
+          element={
+            <ProtectedPage>
+              <Following />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/search"
+          element={
+            <ProtectedPage>
+              <Search />
+            </ProtectedPage>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedPage>
+              <Notifications />
+            </ProtectedPage>
+          }
+        />
       </Route>
 
       {/* Fallback */}

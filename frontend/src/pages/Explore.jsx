@@ -6,11 +6,13 @@ import PostModal from "../components/PostModal.jsx";
 import PostCreateModal from "../components/PostCreateModal.jsx";
 import useIsDesktop from "../lib/useIsDesktop.js";
 import { defaultPosts, isDemoPost } from "../data/defaultPosts.js";
+import { useAuth } from "../auth/AuthContext.jsx";
 
 const TILE_AREAS = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
 
 export default function Explore() {
   const isDesktop = useIsDesktop();
+  const { token } = useAuth();
   const [items, setItems] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,6 +23,13 @@ export default function Explore() {
   const loadExplore = useCallback(async (isActive = () => true) => {
     setLoading(true);
     setError(null);
+    if (!token) {
+      if (isActive()) {
+        setItems([]);
+        setLoading(false);
+      }
+      return;
+    }
     try {
       const data = await request(`/explore/posts?limit=${EXPLORE_LIMIT}`);
       if (isActive()) {
@@ -36,7 +45,7 @@ export default function Explore() {
         setLoading(false);
       }
     }
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     let mounted = true;

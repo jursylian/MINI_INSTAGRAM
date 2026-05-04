@@ -21,6 +21,10 @@ export default function Feed() {
   const [editPost, setEditPost] = useState(null);
   const postsToRender = !loading && items.length === 0 ? defaultPosts : items;
 
+  function requireLogin() {
+    window.alert("Please log in");
+  }
+
   const loadFeed = useCallback(async (isActive = () => true) => {
     setLoading(true);
     setError(null);
@@ -76,6 +80,10 @@ export default function Feed() {
 
   function handleOpenComments(id) {
     if (!id) return;
+    if (!token) {
+      requireLogin();
+      return;
+    }
     if (isDesktop) {
       setModalPostId(id);
       return;
@@ -90,6 +98,10 @@ export default function Feed() {
 
   async function handleToggleLike(postId) {
     if (!postId || likeLoadingIds.has(postId)) return;
+    if (!token) {
+      requireLogin();
+      return;
+    }
     setError(null);
     setLikeLoading(postId, true);
     try {

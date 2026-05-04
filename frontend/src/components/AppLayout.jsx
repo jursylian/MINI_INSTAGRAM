@@ -61,6 +61,10 @@ export default function AppLayout() {
   useEffect(() => {
     const shouldOpen = Boolean(location.state?.createOpen);
     if (!shouldOpen) return;
+    if (!user?._id) {
+      navigate("/login", { replace: true });
+      return;
+    }
     if (isDesktop) {
       setCreateOpen(true);
     } else {
@@ -70,7 +74,7 @@ export default function AppLayout() {
       });
     }
     navigate(".", { replace: true, state: null });
-  }, [isDesktop, location.pathname, location.state, navigate]);
+  }, [isDesktop, location.pathname, location.state, navigate, user?._id]);
 
   useEffect(() => {
     if (!createOpen || isDesktop) return;
@@ -212,6 +216,10 @@ export default function AppLayout() {
   }, [commentsPostId]);
 
   function togglePanel(type) {
+    if (!user?._id && (type === "search" || type === "notifications")) {
+      navigate("/login");
+      return;
+    }
     if (!isDesktop && type === "notifications") {
       setPanel(null);
       navigate("/notifications");
@@ -223,6 +231,18 @@ export default function AppLayout() {
       return;
     }
     setPanel((prev) => (prev === type ? null : type));
+  }
+
+  function handleCreate() {
+    if (!user?._id) {
+      navigate("/login");
+      return;
+    }
+    if (isDesktop) {
+      setCreateOpen(true);
+    } else {
+      navigate("/create", { state: { from: location.pathname } });
+    }
   }
 
   async function handleAddComment(event) {
@@ -363,13 +383,7 @@ export default function AppLayout() {
             onToggleNotifications={() => {
               togglePanel("notifications");
             }}
-            onCreate={() => {
-              if (isDesktop) {
-                setCreateOpen(true);
-              } else {
-                navigate("/create", { state: { from: location.pathname } });
-              }
-            }}
+            onCreate={handleCreate}
             onNavigate={() => {
               setPanel(null);
             }}
@@ -406,13 +420,7 @@ export default function AppLayout() {
           notifCount={unreadCount}
           notificationsActive={isNotifications}
           createActive={isCreate || createOpen}
-          onCreate={() => {
-            if (isDesktop) {
-              setCreateOpen(true);
-            } else {
-              navigate("/create", { state: { from: location.pathname } });
-            }
-          }}
+          onCreate={handleCreate}
           onNotifications={() => {
             if (isDesktop) {
               togglePanel("notifications");
@@ -432,7 +440,7 @@ export default function AppLayout() {
             }
             exploreActive={location.pathname === "/explore" && !panelOpen}
             profileActive={isProfile}
-            profileHref={user?._id ? `/profile/${user._id}` : "/"}
+            profileHref={user?._id ? `/profile/${user._id}` : "/login"}
             profileAvatar={user?.avatar}
             onHome={() => {
               setPanel(null);
@@ -444,13 +452,7 @@ export default function AppLayout() {
               navigate("/explore");
             }}
             onNotifications={() => togglePanel("notifications")}
-            onCreate={() => {
-              if (isDesktop) {
-                setCreateOpen(true);
-              } else {
-                navigate("/create", { state: { from: location.pathname } });
-              }
-            }}
+            onCreate={handleCreate}
           />
           <Footer
             className="hidden sm:block fixed bottom-0 left-0 right-0 z-40"
@@ -479,13 +481,7 @@ export default function AppLayout() {
               },
               {
                 label: "Create",
-                onClick: () => {
-                  if (isDesktop) {
-                    setCreateOpen(true);
-                  } else {
-                    navigate("/create", { state: { from: location.pathname } });
-                  }
-                },
+                onClick: handleCreate,
               },
             ]}
           />
