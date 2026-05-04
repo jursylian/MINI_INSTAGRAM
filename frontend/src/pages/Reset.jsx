@@ -16,14 +16,13 @@ export default function Reset() {
     e.preventDefault();
     setError(null);
     setSent(false);
+    if (!identifier.trim()) {
+      setError("Please enter your email or username.");
+      return;
+    }
     setLoading(true);
 
     try {
-      if (!identifier.trim()) {
-        setError("Please enter your email or username.");
-        setLoading(false);
-        return;
-      }
       await request("/auth/forgot-password", {
         method: "POST",
         body: JSON.stringify({ identifier }),

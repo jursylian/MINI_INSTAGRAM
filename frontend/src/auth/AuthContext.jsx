@@ -8,6 +8,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(Boolean(token));
   const [error, setError] = useState(null);
+  const [authCheckVersion, setAuthCheckVersion] = useState(0);
 
   useEffect(() => {
     let mounted = true;
@@ -18,6 +19,8 @@ export function AuthProvider({ children }) {
         return;
       }
 
+      setLoading(true);
+      setError(null);
       try {
         const data = await request("/auth/me");
         if (mounted) {
@@ -28,8 +31,10 @@ export function AuthProvider({ children }) {
         if (mounted) {
           setUser(null);
           setError(err.message);
-          localStorage.removeItem("token");
-          setToken(null);
+          if (err.status === 401 || err.status === 403) {
+            localStorage.removeItem("token");
+            setToken(null);
+          }
         }
       } finally {
         if (mounted) setLoading(false);
@@ -40,7 +45,7 @@ export function AuthProvider({ children }) {
     return () => {
       mounted = false;
     };
-  }, [token]);
+  }, [token, authCheckVersion]);
 
   async function login({ email, username, password }) {
     setError(null);
@@ -101,6 +106,10 @@ export function AuthProvider({ children }) {
     setError(null);
   }
 
+  function retryAuthCheck() {
+    setAuthCheckVersion((version) => version + 1);
+  }
+
   const value = {
     token,
     user,
@@ -110,6 +119,7 @@ export function AuthProvider({ children }) {
     register,
     updateUser,
     logout,
+    retryAuthCheck,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

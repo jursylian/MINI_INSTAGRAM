@@ -14,7 +14,7 @@ import UserLink from "./UserLink.jsx";
 import Footer from "./Footer.jsx";
 
 export default function AppLayout() {
-  const { user, logout } = useAuth();
+  const { user, logout, error: authError, retryAuthCheck } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const isDesktop = useIsDesktop();
@@ -382,6 +382,21 @@ export default function AppLayout() {
         </LeftPanelFixed>
 
         <main className="flex-1 min-w-0 pt-[56px] pb-[56px] sm:pt-0 sm:pb-[158px] md:ml-[78px]">
+          {authError && !user ? (
+            <div className="mx-auto mt-4 w-[calc(100%-32px)] max-w-[980px] border border-[#DBDBDB] bg-white p-3 text-[13px]">
+              <div className="text-red-500">{authError}</div>
+              <div className="mt-1 text-[#737373]">
+                Some account data may be unavailable while the server starts.
+              </div>
+              <button
+                type="button"
+                onClick={retryAuthCheck}
+                className="mt-2 font-semibold text-[#0095F6] hover:text-[#1877F2]"
+              >
+                Retry
+              </button>
+            </div>
+          ) : null}
           <Outlet />
         </main>
       </div>

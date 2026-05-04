@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { request } from "../lib/apiClient.js";
 import { DEFAULT_LIMIT } from "../lib/constants.js";
 import FeedPost from "../components/FeedPost.jsx";
@@ -19,37 +19,38 @@ export default function Feed() {
   const [likeLoadingIds, setLikeLoadingIds] = useState(new Set());
   const [modalPostId, setModalPostId] = useState(null);
   const [editPost, setEditPost] = useState(null);
-  const postsToRender =
-    !loading && !error && items.length === 0 ? defaultPosts : items;
+  const postsToRender = !loading && items.length === 0 ? defaultPosts : items;
+
+  const loadFeed = useCallback(async (isActive = () => true) => {
+    setLoading(true);
+    setError(null);
+    if (!token) {
+      if (isActive()) {
+        setItems([]);
+        setLoading(false);
+      }
+      return;
+    }
+    try {
+      const data = await request(`/posts?limit=${FEED_LIMIT}`);
+      if (isActive()) setItems((data.items || []).slice(0, FEED_LIMIT));
+    } catch (err) {
+      if (isActive()) {
+        setItems([]);
+        setError(err.message || "Failed to load feed.");
+      }
+    } finally {
+      if (isActive()) setLoading(false);
+    }
+  }, [token]);
 
   useEffect(() => {
-    let mounted = true;
-
-    async function loadFeed() {
-      setLoading(true);
-      setError(null);
-      if (!token) {
-        if (mounted) {
-          setItems([]);
-          setLoading(false);
-        }
-        return;
-      }
-      try {
-        const data = await request(`/posts?limit=${FEED_LIMIT}`);
-        if (mounted) setItems((data.items || []).slice(0, FEED_LIMIT));
-      } catch (err) {
-        if (mounted) setError(err.message || "Failed to load feed.");
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    }
-
-    loadFeed();
+    let active = true;
+    loadFeed(() => active);
     return () => {
-      mounted = false;
+      active = false;
     };
-  }, [token]);
+  }, [loadFeed]);
 
   useEffect(() => {
     function handleCreated(event) {
@@ -118,8 +119,18 @@ export default function Feed() {
         )}
 
         {error && (
-          <div className="border border-[#DBDBDB] bg-white p-3 text-[14px] text-red-500">
-            {error}
+          <div className="border border-[#DBDBDB] bg-white p-3 text-[14px]">
+            <div className="text-red-500">{error}</div>
+            <div className="mt-1 text-[#737373]">
+              Showing demo posts while the server wakes up.
+            </div>
+            <button
+              type="button"
+              onClick={loadFeed}
+              className="mt-3 text-[14px] font-semibold text-[#0095F6] hover:text-[#1877F2]"
+            >
+              Retry
+            </button>
           </div>
         )}
 

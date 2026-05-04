@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { request } from "../lib/apiClient.js";
 import { EXPLORE_LIMIT } from "../lib/constants.js";
@@ -16,35 +16,35 @@ export default function Explore() {
   const [loading, setLoading] = useState(true);
   const [modalPostId, setModalPostId] = useState(null);
   const [editPost, setEditPost] = useState(null);
-  const postsToRender =
-    !loading && !error && items.length === 0 ? defaultPosts : items;
+  const postsToRender = !loading && items.length === 0 ? defaultPosts : items;
+
+  const loadExplore = useCallback(async (isActive = () => true) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await request(`/explore/posts?limit=${EXPLORE_LIMIT}`);
+      if (isActive()) {
+        setItems(data.items || []);
+      }
+    } catch (err) {
+      if (isActive()) {
+        setItems([]);
+        setError(err.message || "Failed to load Explore.");
+      }
+    } finally {
+      if (isActive()) {
+        setLoading(false);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     let mounted = true;
-    async function loadExplore() {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await request(`/explore/posts?limit=${EXPLORE_LIMIT}`);
-        if (mounted) {
-          setItems(data.items || []);
-        }
-      } catch (err) {
-        if (mounted) {
-          setError(err.message || "Failed to load Explore.");
-        }
-      } finally {
-        if (mounted) {
-          setLoading(false);
-        }
-      }
-    }
-
-    loadExplore();
+    loadExplore(() => mounted);
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [loadExplore]);
 
   return (
     <div className="px-2 md:px-10 py-10 pb-20 md:pb-10">
@@ -52,8 +52,18 @@ export default function Explore() {
         <div className="mt-6">
           {loading ? <div className="text-[14px] text-[#737373]">Loading...</div> : null}
           {error ? (
-            <div className="p-4 text-[14px] text-red-500">
-              {error}
+            <div className="p-4 text-[14px]">
+              <div className="text-red-500">{error}</div>
+              <div className="mt-1 text-[#737373]">
+                Showing demo posts while the server wakes up.
+              </div>
+              <button
+                type="button"
+                onClick={() => loadExplore()}
+                className="mt-3 font-semibold text-[#0095F6] hover:text-[#1877F2]"
+              >
+                Retry
+              </button>
             </div>
           ) : null}
 
